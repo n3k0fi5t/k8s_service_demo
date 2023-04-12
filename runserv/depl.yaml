@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: echo
+        image: nek0fi5t/echo
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+                #readinessProbe:
+                #httpGet:
+                #path: /readiness
+                #port: 8888
+                #initialDelaySeconds: 5
+                #periodSeconds: 5
